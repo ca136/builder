@@ -1,6 +1,6 @@
 {
   "name": "@builder.io/webcomponents",
-  "version": "1.0.134-alpha.3",
+  "version": "1.0.134-alpha.6",
   "description": "",
   "keywords": [],
   "main": "./dist/system/builder-webcomponents-async.js",
@@ -149,7 +149,7 @@
   "//": "TODO: make all of these optional dependencies, simple mode doesn't require",
   "dependencies": {
     "@builder.io/react": "^1.0.111-alpha.3",
-    "@builder.io/sdk": "^1.0.60-alpha.2",
+    "@builder.io/sdk": "^1.0.60-alpha.5",
     "@builder.io/shopify": "^1.1.45-alpha.3",
     "@builder.io/widgets": "^1.0.100",
     "@emotion/core": "^10.0.22",
