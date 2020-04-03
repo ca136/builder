@@ -72,7 +72,10 @@ class ColumnsComponent extends React.Component<any> {
   }
 
   getWidth(index: number) {
-    return (this.columns[index] && this.columns[index].width) || 100 / this.columns.length
+    return (
+      (this.columns[index] && this.columns[index].width) ||
+      100 / this.columns.length
+    )
   }
 
   getColumnWidth(index: number) {
@@ -92,8 +95,12 @@ class ColumnsComponent extends React.Component<any> {
           css={{
             display: 'flex',
             ...(this.props.stackColumnsAt !== 'never' && {
-              [`@media (max-width: ${this.props.stackColumnsAt !== 'tablet' ? 639 : 999}px)`]: {
-                flexDirection: this.props.reverseColumnsWhenStacked ? 'column-reverse' : 'column',
+              [`@media (max-width: ${
+                this.props.stackColumnsAt !== 'tablet' ? 639 : 999
+              }px)`]: {
+                flexDirection: this.props.reverseColumnsWhenStacked
+                  ? 'column-reverse'
+                  : 'column',
                 alignItems: 'stretch'
               }
             })
@@ -135,7 +142,9 @@ class ColumnsComponent extends React.Component<any> {
                     key={index}
                     // TODO: childOf [parentBlocks]?
                     child
-                    parentElementId={this.props.builderBlock && this.props.builderBlock.id}
+                    parentElementId={
+                      this.props.builderBlock && this.props.builderBlock.id
+                    }
                     blocks={col.blocks}
                     dataPath={`component.options.columns.${index}.blocks`}
                   />
@@ -172,7 +181,8 @@ export const Columns = withBuilder(ColumnsComponent, {
         {
           name: 'link',
           type: 'string',
-          helperText: 'Optionally set a url that clicking this column will link to'
+          helperText:
+            'Optionally set a url that clicking this column will link to'
         }
       ],
       defaultValue: [{ blocks: defaultBlocks }, { blocks: defaultBlocks }],
@@ -186,10 +196,14 @@ export const Columns = withBuilder(ColumnsComponent, {
         const columns = options.get('columns') as Array<Map<String, any>>
 
         if (Array.isArray(columns)) {
-          const containsColumnWithWidth = !!columns.find(col => col.get('width'))
+          const containsColumnWithWidth = !!columns.find(col =>
+            col.get('width')
+          )
 
           if (containsColumnWithWidth) {
-            const containsColumnWithoutWidth = !!columns.find(col => !col.get('width'))
+            const containsColumnWithoutWidth = !!columns.find(
+              col => !col.get('width')
+            )
             if (containsColumnWithoutWidth) {
               clearWidths()
             } else {
@@ -224,7 +238,8 @@ export const Columns = withBuilder(ColumnsComponent, {
       name: 'reverseColumnsWhenStacked',
       type: 'boolean',
       defaultValue: false,
-      helperText: 'When stacking columns for mobile devices, reverse the ordering',
+      helperText:
+        'When stacking columns for mobile devices, reverse the ordering',
       advanced: true
     }
   ]
