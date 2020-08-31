@@ -1741,10 +1741,17 @@ export class Builder {
 
     const queryParams: ParamsMap = {
       // TODO: way to force a request to be in a separate queue. or just lower queue limit to be 1 by default
-      // omit: queue[0].omit || 'meta.componentsUsed',
-      // fields: queue[0].fields || undefined,
       apiKey: this.apiKey,
     };
+
+    if (queue[0].fields) {
+      queryParams.fields = queue[0].fields;
+    }
+
+    if (queue[0].omit) {
+      queryParams.omit = queue[0].omit;
+    }
+
     const pageQueryParams: ParamsMap =
       typeof location !== 'undefined'
         ? QueryString.parseDeep(location.search.substr(1))
