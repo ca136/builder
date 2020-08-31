@@ -24,6 +24,9 @@ const defaultBlocks: BuilderElement[] = [
         textAlign: 'center',
         lineHeight: 'normal',
         height: 'auto',
+        minHeight: '20px',
+        minWidth: '20px',
+        overflow: 'hidden',
       },
     },
     component: {
@@ -171,7 +174,7 @@ export const Columns = withBuilder(ColumnsComponent, {
         },
         {
           name: 'link',
-          type: 'string',
+          type: 'url',
           helperText: 'Optionally set a url that clicking this column will link to',
         },
       ],

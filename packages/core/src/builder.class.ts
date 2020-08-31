@@ -11,6 +11,7 @@ import { Animator } from './classes/animator.class';
 import { BuilderElement } from './types/element';
 import Cookies from './classes/cookies.class';
 import { omit } from './functions/omit.function';
+import { getTopLevelDomain } from './functions/get-top-level-domain';
 import serverOnlyRequire from './functions/server-only-require.function';
 import { BuilderContent } from './types/content';
 import { uuid } from './functions/uuid';
@@ -97,8 +98,8 @@ function setCookie(name: string, value: string, expires?: Date) {
       (value || '') +
       expiresString +
       '; path=/' +
-      (secure ? ';secure' : '') +
-      '; SameSite=None';
+      `; domain=${getTopLevelDomain(location.hostname)}` +
+      (secure ? ';secure ; SameSite=None' : '');
   } catch (err) {
     console.warn('Could not set cookie', err);
   }
@@ -204,6 +205,8 @@ export interface GetContentOptions {
   preview?: boolean;
   entry?: string;
   alias?: string;
+  fields?: string;
+  omit?: string;
   key?: string;
   // For prerender (prerenderFormat?)
   format?: 'amp' | 'email' | 'html';
@@ -1737,7 +1740,9 @@ export class Builder {
     this.getOverridesFromQueryString();
 
     const queryParams: ParamsMap = {
-      omit: 'meta.componentsUsed',
+      // TODO: way to force a request to be in a separate queue. or just lower queue limit to be 1 by default
+      // omit: queue[0].omit || 'meta.componentsUsed',
+      // fields: queue[0].fields || undefined,
       apiKey: this.apiKey,
     };
     const pageQueryParams: ParamsMap =
@@ -2031,6 +2036,13 @@ export class Builder {
     if (!this.apiKey) {
       throw new Error('Builder needs to be initialized with an API key!');
     }
-    return this.queueGetContent(modelName);
+    return this.queueGetContent(modelName, options);
+  }
+
+  getAll(modelName: string, options: GetContentOptions = {}): Promise<BuilderContent[]> {
+    return this.getContent(modelName, {
+      limit: 30,
+      ...options,
+    }).promise();
   }
 }

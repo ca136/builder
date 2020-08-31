@@ -136,7 +136,12 @@ class SymbolComponent extends React.Component<SymbolProps> {
                   context={{ ...state.context }}
                   modelName={model}
                   entry={entry}
-                  data={this.props.inheritState ? { ...data, ...state.state } : data}
+                  data={{
+                    ...data,
+                    ...(!!this.props.inheritState && state.state),
+                    ...this.props.builderBlock?.component?.options?.symbol?.content?.data?.state,
+                  }}
+                  renderLink={state.renderLink}
                   inlineContent={symbol?.inline}
                   {...(content && { content })}
                   options={{ key }}

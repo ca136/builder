@@ -6,6 +6,16 @@ const importWidgets = () => import('@builder.io/widgets');
 
 Builder.isStatic = true;
 
+function wrapInDiv(el: HTMLElement) {
+  const newDiv = document.createElement('div');
+  const currentChildren = Array.from(el.children);
+  for (const child of currentChildren) {
+    newDiv.appendChild(child);
+  }
+  el.appendChild(newDiv);
+  return newDiv;
+}
+
 const componentName = process.env.ANGULAR ? 'builder-component-element' : 'builder-component';
 
 if (Builder.isIframe) {
@@ -182,6 +192,12 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
       }
       this.connected = true;
 
+      if (Builder.isEditing && !location.href.includes('builder.stopPropagation=false')) {
+        this.addEventListener('click', e => {
+          e.stopPropagation();
+        });
+      }
+
       if (
         this.hasAttribute('editing-only') &&
         this.getAttribute('editing-only') !== 'false' &&
@@ -284,7 +300,7 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
 
       if (!this.prerender || !builder.apiKey || fresh) {
         const currentContent = fresh ? null : this.currentContent;
-        this.loadReact(currentContent ? currentContent : entry ? { id: entry } : null, fresh);
+        this.loadPreact(currentContent ? currentContent : entry ? { id: entry } : null, fresh);
         return;
       }
 
@@ -297,7 +313,7 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
       if (currentContent && !Builder.isEditing) {
         this.data = currentContent;
         this.loaded();
-        this.loadReact(this.data);
+        this.loadPreact(this.data);
         return;
       }
 
@@ -342,14 +358,14 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
                 this.dispatchEvent(loadEvent);
               }
 
-              this.loadReact(data);
+              this.loadPreact(data);
               subscription.unsubscribe();
               unsubscribed = true;
             }
           },
           (error: any) => {
             // Server render failed, not the end of the world, load react anyway
-            this.loadReact();
+            this.loadPreact();
             subscription.unsubscribe();
             unsubscribed = true;
           }
@@ -376,16 +392,7 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
       }
     }
 
-    loadReact = async (data?: any, fresh = false) => {
-      // Hack for now to not load shopstyle on react despite them using the old component format
-      if (
-        typeof location !== 'undefined' &&
-        !Builder.isIframe &&
-        location.hostname.indexOf('shopstyle') > -1
-      ) {
-        return;
-      }
-
+    loadPreact = async (data?: any, fresh = false) => {
       const entry = data?.id || this.getAttribute('entry');
 
       this.unsubscribe();
@@ -426,7 +433,7 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
 
         // Ensure styles don't load twice
         BuilderPage.renderInto(
-          this,
+          wrapInDiv(this),
           {
             ...({ ref: (ref: any) => (this.builderPageRef = ref) } as any),
             modelName: name!,
@@ -482,7 +489,7 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
             const shopify = new Shopify({});
 
             BuilderPage.renderInto(
-              this,
+              wrapInDiv(this),
               {
                 ...({ ref: (ref: any) => (this.builderPageRef = ref) } as any),
                 modelName: name!,
@@ -535,7 +542,7 @@ if (Builder.isBrowser && !customElements.get(componentName)) {
               const { Shopify } = await getShopifyJsPromise;
               const shopify = new Shopify({});
               BuilderPage.renderInto(
-                this,
+                wrapInDiv(this),
                 {
                   ...({
                     ref: (ref: any) => (this.builderPageRef = ref),

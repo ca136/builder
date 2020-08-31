@@ -54,8 +54,10 @@ export const SectionRef = (props: SectionRefProps) => {
       )
         .then(res => res.text())
         .then(text => {
-          cache[sectionName] = text;
-          setHtml(text);
+          // to ensure we don't keep fetching content for empty sections, we need to insert something
+          const safeText = text || '<span></span>';
+          cache[sectionName] = safeText;
+          setHtml(safeText);
           setTimeout(() => {
             if (ref.current) {
               findAndRunScripts(ref.current);
@@ -91,6 +93,7 @@ Builder.registerComponent(SectionRef, {
       name: 'section',
       helperText: 'Full path to the section, e.g. sections/product.liquid',
       type: 'string',
+      advanced: true,
     },
   ],
 });
