@@ -2,7 +2,8 @@ import { Builder, withChildren } from '@builder.io/react';
 import { HeroWithEditableChildren } from './HeroWithChildren';
 
 // This line is very important! :)
-const HeroWithBuilderChildren = withChildren(HeroWithEditableChildren);
+export const HeroWithBuilderChildren = withChildren(HeroWithEditableChildren);
+
 export const HeroWithBuilderChildrenConfig = {
   name: 'Hero With Children',
 
@@ -81,4 +82,5 @@ export const HeroWithBuilderChildrenConfig = {
     },
   ],
 } 
+
 Builder.registerComponent(HeroWithBuilderChildren, HeroWithBuilderChildrenConfig);

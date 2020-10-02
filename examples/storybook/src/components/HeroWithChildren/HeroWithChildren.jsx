@@ -33,7 +33,7 @@ export const HeroWithEditableChildren = props => {
   const { image, parallaxStrength, height } = props;
 
   const classes = useStyles();
-
+  console.log('wtf???', props);
   return (
     <Parallax blur={{ min: -20, max: 20 }} strength={parallaxStrength}>
       <div style={{ minHeight: height }} className={classes.container}>

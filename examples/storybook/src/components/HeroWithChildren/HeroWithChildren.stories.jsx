@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { getDefaultProps } from '@builder.io/storybook';
-import { HeroWithEditableChildren } from './HeroWithChildren';
-import { HeroWithBuilderChildrenConfig } from './HeroWithChildren.builder';
+import { HeroWithBuilderChildrenConfig, HeroWithBuilderChildren } from './HeroWithChildren.builder';
 
 const props = getDefaultProps(HeroWithBuilderChildrenConfig);
+console.log('foooofds', props);
 
 export default {
   title: 'Hero with Children',
-  component: HeroWithEditableChildren,
+  component: HeroWithBuilderChildren,
   parameters: {
     builder: {
       config: HeroWithBuilderChildrenConfig,
@@ -18,6 +18,6 @@ export default {
 
 export const DefaultHeroWithChildren = () => (
   <div>
-    <HeroWithEditableChildren {...props}></HeroWithEditableChildren>
+    <HeroWithBuilderChildren {...props} />
   </div>
 );
