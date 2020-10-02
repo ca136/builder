@@ -3,8 +3,7 @@ import { HeroWithEditableChildren } from './HeroWithChildren';
 
 // This line is very important! :)
 const HeroWithBuilderChildren = withChildren(HeroWithEditableChildren);
-
-Builder.registerComponent(HeroWithBuilderChildren, {
+export const HeroWithBuilderChildrenConfig = {
   name: 'Hero With Children',
 
   inputs: [
@@ -81,4 +80,5 @@ Builder.registerComponent(HeroWithBuilderChildren, {
       },
     },
   ],
-});
+} 
+Builder.registerComponent(HeroWithBuilderChildren, HeroWithBuilderChildrenConfig);
